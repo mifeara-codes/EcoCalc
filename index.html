@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>EcoCalc - Calculadora de Economia Sustentável</title>
+<meta name="theme-color" content="#2f5d3a">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icon-192.png">
+<style>
+:root{--paper:#efe5cc;--card:#f8f1de;--ink:#2b3a2a;--forest:#2f5d3a;--leaf:#6fa04b;--water:#3f86a0;--sun:#e0a526;--clay:#c9683f;--line:#2b3a2a;--shadow:#2b3a2a}
+:root[data-theme=dark]{--paper:#1d2a21;--card:#26362b;--ink:#efe5cc;--forest:#8cc66b;--leaf:#a8d67f;--water:#6bb6d0;--sun:#f0c14b;--clay:#e08a63;--line:#efe5cc;--shadow:#0e1610}
+*{box-sizing:border-box}
+body{margin:0;font-family:"Trebuchet MS","Segoe UI",sans-serif;color:var(--ink);line-height:1.5;
+background-color:var(--paper);
+background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' seed='4'/%3E%3CfeColorMatrix values='0 0 0 0 .35 0 0 0 0 .28 0 0 0 0 .18 0 0 0 .22 0'/%3E%3C/filter%3E%3Crect width='220' height='220' filter='url(%23n)'/%3E%3Cg stroke='%23a08a5c' stroke-opacity='.35' fill='none' stroke-linecap='round'%3E%3Cpath d='M20 40q15-8 30 0M150 90q20 6 38-4M60 170q12 10 28 2M170 190q10-12 26-4M100 20l10 8'/%3E%3C/g%3E%3C/svg%3E");}
+.wrap{max-width:1000px;margin:0 auto;padding:18px}
+header{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.logo{display:flex;align-items:center;gap:10px;font-size:1.7rem;font-weight:800;color:var(--forest);letter-spacing:.5px}
+.logo svg{width:44px;height:44px}
+button{font:inherit;cursor:pointer}
+.btn{background:var(--sun);color:#2b3a2a;border:2.5px solid var(--line);border-radius:255px 15px 225px 15px/15px 225px 15px 255px;padding:8px 18px;font-weight:700;box-shadow:3px 3px 0 var(--shadow);transition:transform .1s}
+.btn:hover{transform:translate(-1px,-1px) rotate(-1deg)}.btn:active{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--shadow)}
+.hero{margin:18px 0;padding:6px 4px}
+.hero h1{margin:0 0 4px;font-size:clamp(1.5rem,4vw,2.3rem);color:var(--forest)}
+.hero p{margin:0;max-width:640px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:20px}
+.card{background:var(--card);border:2.5px solid var(--line);border-radius:22px 12px 26px 14px/14px 26px 12px 22px;padding:16px 18px;box-shadow:5px 5px 0 var(--shadow);animation:pop .5s ease both}
+.card:nth-child(odd){transform:rotate(-.4deg)}.card:nth-child(even){transform:rotate(.4deg)}
+@keyframes pop{from{opacity:0;transform:translateY(12px) scale(.97)}}
+.card h2{margin:0 0 10px;font-size:1.15rem;display:flex;align-items:center;gap:8px}
+.card h2 svg{width:26px;height:26px;flex:none}
+label{display:block;font-size:.88rem;font-weight:700;margin-top:10px}
+input{width:100%;padding:8px 10px;margin-top:3px;font:inherit;color:var(--ink);background:var(--paper);border:2px solid var(--line);border-radius:10px 6px 12px 6px/6px 12px 6px 10px}
+input:focus{outline:3px solid var(--leaf)}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:14px;margin:22px 0}
+.kpi{border:2.5px solid var(--line);border-radius:18px 10px 20px 10px/10px 20px 10px 18px;padding:12px 14px;box-shadow:4px 4px 0 var(--shadow);color:#2b3a2a}
+.kpi small{display:block;font-weight:700;font-size:.8rem;text-transform:uppercase;letter-spacing:.6px}
+.kpi b{font-size:1.5rem;display:block}
+.k1{background:#b9d98f}.k2{background:#f0cf73}.k3{background:#a9d3e0}.k4{background:#e9b48f}.k5{background:#cfe3a8}
+.bars{display:flex;justify-content:space-around;align-items:flex-end;height:210px;padding-top:8px;border-bottom:2.5px solid var(--line)}
+.grp{display:flex;gap:8px;align-items:flex-end;height:100%;text-align:center}
+.col{width:44px;display:flex;flex-direction:column;justify-content:flex-end;height:100%;font-size:.7rem;font-weight:700}
+.bar{border:2px solid var(--line);border-radius:8px 8px 2px 2px;min-height:4px;transition:height .7s cubic-bezier(.3,1.4,.5,1)}
+.cur{background:var(--clay)}.sus{background:var(--leaf)}
+.lbls{display:flex;justify-content:space-around;font-size:.8rem;font-weight:700;margin-top:6px}
+.legend{display:flex;gap:16px;font-size:.82rem;margin-top:8px}
+.legend i{display:inline-block;width:14px;height:14px;border:2px solid var(--line);border-radius:4px;vertical-align:middle;margin-right:5px}
+#dicas{list-style:none;margin:0;padding:0}
+#dicas li{padding:10px 12px 10px 38px;margin-bottom:10px;position:relative;background:var(--paper);border:2px dashed var(--line);border-radius:12px}
+#dicas li:before{content:"";position:absolute;left:12px;top:15px;width:14px;height:14px;background:var(--leaf);border:2px solid var(--line);border-radius:0 80% 0 80%;transform:rotate(-10deg)}
+footer{text-align:center;font-size:.8rem;margin:26px 0 10px;opacity:.85}
+.note{font-size:.78rem;opacity:.8;margin-top:8px}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+ <div class="logo"><svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="21" fill="#b9d98f" stroke="currentColor" stroke-width="3"/><path d="M14 33c0-12 8-18 20-18 0 12-6 19-18 19M14 33l12-12" fill="#6fa04b" stroke="#2b3a2a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>EcoCalc</div>
+ <div style="display:flex;gap:10px"><button class="btn" id="tema">Modo escuro</button><button class="btn" id="inst" hidden>Instalar app</button></div>
+</header>
+<section class="hero"><h1>Quanto o seu bolso e o planeta ganham com pequenos hábitos?</h1>
+<p>Compare o seu consumo atual de água e energia com um hábito mais sustentável e veja a economia mensal e anual.</p></section>
+
+<div class="grid">
+ <div class="card"><h2><svg viewBox="0 0 32 32"><path d="M16 3C11 11 7 15 7 20a9 9 0 0 0 18 0c0-5-4-9-9-17z" fill="#6bb6d0" stroke="#2b3a2a" stroke-width="2.5" stroke-linejoin="round"/></svg>Banho e torneira</h2>
+  <div class="row"><div><label>Moradores</label><input id="ppl" type="number" min="1"></div><div><label>Potência chuveiro (W)</label><input id="pot" type="number" min="0"></div></div>
+  <div class="row"><div><label>Banho atual (min)</label><input id="bAt" type="number" min="0"></div><div><label>Banho sustentável (min)</label><input id="bSu" type="number" min="0"></div></div>
+  <div class="row"><div><label>Torneira atual (min/dia)</label><input id="tAt" type="number" min="0"></div><div><label>Torneira sustentável (min/dia)</label><input id="tSu" type="number" min="0"></div></div>
+ </div>
+ <div class="card"><h2><svg viewBox="0 0 32 32"><path d="M16 3a8 8 0 0 0-5 14v4h10v-4a8 8 0 0 0-5-14zM12 25h8M13 29h6" fill="#f0cf73" stroke="#2b3a2a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Iluminação e tarifas</h2>
+  <div class="row"><div><label>Nº de lâmpadas</label><input id="lamps" type="number" min="0"></div><div><label>Horas ligadas/dia</label><input id="lh" type="number" min="0"></div></div>
+  <div class="row"><div><label>Tarifa energia (R$/kWh)</label><input id="tarE" type="number" step="0.01" min="0"></div><div><label>Tarifa água (R$/m³)</label><input id="tarA" type="number" step="0.01" min="0"></div></div>
+  <p class="note">Compara lâmpada incandescente de 60 W com LED de 9 W. Use as tarifas da sua conta de luz e água.</p>
+ </div>
+</div>
+
+<div class="kpis">
+ <div class="kpi k1"><small>Economia mensal</small><b id="kM">-</b></div>
+ <div class="kpi k2"><small>Economia anual</small><b id="kA">-</b></div>
+ <div class="kpi k3"><small>Água poupada/mês</small><b id="kW">-</b></div>
+ <div class="kpi k4"><small>Energia poupada/mês</small><b id="kE">-</b></div>
+ <div class="kpi k5"><small>CO₂ evitado/ano</small><b id="kC">-</b></div>
+ <div class="kpi k3"><small>Banheiras/ano</small><b id="kB">-</b></div>
+</div>
+
+<div class="grid">
+ <div class="card"><h2>Comparativo mensal</h2>
+  <div class="bars" id="bars"></div><div class="lbls"><span>Custo (R$)</span><span>Água (m³)</span><span>Energia (kWh)</span></div>
+  <div class="legend"><span><i class="cur"></i>Hábito atual</span><span><i class="sus"></i>Hábito sustentável</span></div></div>
+ <div class="card"><h2>Dicas personalizadas</h2><ul id="dicas"></ul></div>
+</div>
+<footer>Estimativas com médias: chuveiro 9 L/min, torneira 6 L/min, 0,0385 kg de CO₂ por kWh, banheira de 150 L. Ajuste em CONFIG no script.</footer>
+</div>
+
+<script>
+const CONFIG={chuveiroLmin:9,torneiraLmin:6,co2kWh:0.0385,banheiraL:150,wIncand:60,wLed:9,dias:30};
+const DEF={ppl:3,pot:5500,bAt:15,bSu:7,tAt:10,tSu:5,lamps:10,lh:5,tarE:0.95,tarA:12};
+const ids=Object.keys(DEF),$=i=>document.getElementById(i);
+let S=Object.assign({},DEF);
+try{Object.assign(S,JSON.parse(localStorage.getItem('ecocalc')||'{}'))}catch(e){}
+ids.forEach(i=>{$(i).value=S[i];$(i).addEventListener('input',calc)});
+const n=v=>Math.max(0,parseFloat(v)||0),f=(v,d=0)=>v.toLocaleString('pt-BR',{minimumFractionDigits:d,maximumFractionDigits:d}),R=v=>'R$ '+f(v,2);
+function calc(){
+ const v={};ids.forEach(i=>v[i]=n($(i).value));
+ try{localStorage.setItem('ecocalc',JSON.stringify(v))}catch(e){}
+ const C=CONFIG,d=C.dias;
+ const water=(b,t)=>(b*C.chuveiroLmin*v.ppl+t*C.torneiraLmin)*d;
+ const ener=(b,l)=>(v.pot/1000*b/60*v.ppl+v.lamps*l/1000*v.lh)*d;
+ const wA=water(v.bAt,v.tAt),wS=water(v.bSu,v.tSu),eA=ener(v.bAt,C.wIncand),eS=ener(v.bSu,C.wLed);
+ const cA=wA/1000*v.tarA+eA*v.tarE,cS=wS/1000*v.tarA+eS*v.tarE;
+ const sav=Math.max(0,cA-cS),dW=Math.max(0,wA-wS),dE=Math.max(0,eA-eS);
+ $('kM').textContent=R(sav);$('kA').textContent=R(sav*12);
+ $('kW').textContent=f(dW)+' L';$('kE').textContent=f(dE,1)+' kWh';
+ $('kC').textContent=f(dE*12*C.co2kWh,1)+' kg';$('kB').textContent=f(dW*12/C.banheiraL);
+ const sets=[[cA,cS],[wA/1000,wS/1000],[eA,eS]];
+ $('bars').innerHTML=sets.map(([a,s])=>{const m=Math.max(a,s,1e-9);
+  return `<div class="grp"><div class="col"><span>${f(a,1)}</span><div class="bar cur" style="height:${a/m*85}%"></div></div><div class="col"><span>${f(s,1)}</span><div class="bar sus" style="height:${s/m*85}%"></div></div></div>`}).join('');
+ const t=[];
+ if(v.bAt>8)t.push(`Reduzir o banho de ${v.bAt} para ${Math.min(v.bSu,8)} min poupa cerca de ${f((v.bAt-Math.min(v.bSu,8))*C.chuveiroLmin*v.ppl*d)} L de água por mês.`);
+ if(v.pot>4500)t.push('Use a posição verão ou morno do chuveiro sempre que o clima permitir: a energia do chuveiro é o maior peso da conta.');
+ if(v.tAt>5)t.push('Feche a torneira ao ensaboar a louça e ao escovar os dentes. Parece pouco, mas soma centenas de litros por mês.');
+ if(v.lamps>0)t.push('Troque as lâmpadas incandescentes ou fluorescentes por LED: consomem até 85% menos energia e duram muito mais.');
+ if(v.lh>6)t.push('Apague as luzes de cômodos vazios e aproveite mais a luz natural durante o dia.');
+ t.push(`Se todos os hábitos sustentáveis forem mantidos, você evita cerca de ${f(dE*12*C.co2kWh,1)} kg de CO₂ por ano.`);
+ $('dicas').innerHTML=t.map(x=>`<li>${x}</li>`).join('');
+}
+function tema(t){document.documentElement.dataset.theme=t;$('tema').textContent=t==='dark'?'Modo claro':'Modo escuro';try{localStorage.setItem('ecotema',t)}catch(e){}}
+$('tema').onclick=()=>tema(document.documentElement.dataset.theme==='dark'?'light':'dark');
+let st='light';try{st=localStorage.getItem('ecotema')||(matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light')}catch(e){}
+tema(st);calc();
+let dp;addEventListener('beforeinstallprompt',e=>{e.preventDefault();dp=e;$('inst').hidden=false});
+$('inst').onclick=async()=>{if(dp){dp.prompt();await dp.userChoice;dp=null;$('inst').hidden=true}};
+if('serviceWorker'in navigator)addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));
+</script>
+</body>
+</html>
